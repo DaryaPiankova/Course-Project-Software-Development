@@ -20,4 +20,4 @@ app.get('/data', (req, res) => {
 
 app.listen(3002, () => {
   console.log('Database Service running on port 3002');
-});
+ });
