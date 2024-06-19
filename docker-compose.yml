@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  main-service:
+    build: ./main-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - security-service
+      - database-service
+
+  security-service:
+    build: ./security-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - security-database
+
+  database-service:
+    build: ./database-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+
+  broker-service:
+    build: ./broker-service
+    ports:
+      - "3004:3004"
+    depends_on:
+      - rabbitmq
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3003:3000"
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+
+  security-database:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
